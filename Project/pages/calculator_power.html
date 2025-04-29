@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Calcular Dimensionamento</title>
+        <link rel="icon" type="image/png" href="/Project/assets/logo.png">
+        <link rel="stylesheet" href="/Project/styles/style.css">
+        <link rel="stylesheet" href="/Project/styles/styleArruda.css">
+        <script src="/Project/utils/script_pages.js" defer></script>
+        <script src="/Project/utils/script_calculator_power.js" defer></script>
+    </head>
+    <body>
+        <!-- Puxa o Header pelo JavaScript -->
+        <div id="header-container"></div>
+
+        <!-- Criação da Estrutura da Calculadora de Dimensionamento -->
+        <div class="container-dimensionamento">
+            <h1 id="main-title">DIMENSIONAMENTO E ANÁLISE DE GERAÇÃO</h1>
+
+            <!-- Sessão para determinar a Potência do Sistema -->
+            <div class="potencia-sistema" id="potencia-sistema-section">
+                <h2>POTÊNCIA SISTEMA PROPOSTO:</h2>
+                <div class="potencia-input">
+                    <input type="number" id="potencia-sistema-proposto" value="10.0" step="0.1">
+                    <span>kWp</span>
+                    <button onclick="calcular()" id="calculate-power-btn">Calcular Potência</button>
+                </div>
+            </div>
+            
+            <!-- Sessão para Determinar os Valores da Premissas -->
+            <div id="premissas-uc-section">
+                <h2>PREMISSAS UC</h2>
+                <table id="premissas-table">
+                    <tr>
+                        <td>CLASSE DA UC:</td>
+                        <td><strong>BAIXA TENSÃO</strong></td>
+                    </tr>
+                    <tr>
+                        <td>CUSTO DE DISPONIBILIDADE (CD):</td>
+                        <td><input type="number" id="custo-disponibilidade-input" value="100" step="0.1" placeholder="100"></td>
+                    </tr>
+                    <tr>
+                        <td>TARIFA DE TRIBUTAÇÃO &lt; 150kWh:</td>
+                        <td><input type="number" id="tarifa-tributacao-input" value="0.65" step="0.1" placeholder="0,65"></td>
+                    </tr>
+                    <tr>
+                        <td>TARIFA DISTRIBUIDORA &gt; 150kWh:</td>
+                        <td><input type="number" id="tarifa-distribuidora-input" value="0.75" step="0.1" placeholder="0,75"></td>
+                    </tr>
+                    <tr>
+                        <td>FATOR DE SIMULTANEIDADE:</td>
+                        <td><input type="number" id="D15" value="50" step="0.1" placeholder="50%"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Tabela de Despesas Com a Energia Elétrica (Dados inseridos pelo JS) -->
+            <div class="expenses-section" id="energy-expenses-section">
+                <h2>DESPESA COM ENERGIA ELÉTRICA (SUBLIMADES/CS) (1° ANO)</h2>
+                <table id="expenses-table">
+                    <tr>
+                        <td>SEM SISTEMA FOTOVOLTAICO (s/ impostos)</td>
+                        <td><p class="highlight" id="resultado">R$ 0,00</p></td>
+                    </tr>
+                    <tr>
+                        <td>COM SISTEMA FOTOVOLTAICO (s/ impostos)</td>
+                        <td class="highlight" id="resultado2">R$ 0,00</td>
+                    </tr>
+                    <tr>
+                        <td>ECONOMIA</td>
+                        <td class="highlight" id="resultado3">R$ 0,00</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Tabela de Balanço Energético Estimado (Dados inseridos pelo JS) -->
+            <div class="expenses-section" id="energy-expenses-section">
+                <h2>BALANÇO ENERGÉTICO ESTIMADO</h2>
+                <table id="expenses-table">
+                    <tr>
+                        <td>CONSUMO MÉDIO MENSAL COMPENSÁVEL</td>
+                        <td><p class="highlight" id="resultado4">0</p></td>
+                    </tr>
+                    <tr>
+                        <td>GERAÇÃO MÉDIA MENSAL (ESTIMADA)</td>
+                        <td class="highlight" id="resultado5">0</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Tabela Mês a Mês de Balanço Energético (Dados inseridos pelo usuario e retornado pelo JS) -->
+            <!-- Todos os 2 Primeiros Dados da Tabela é necessario o Usuario Inserir os demais são retornado pela Calculadora (Não Alterar os ID) -->
+            <div id="balanco-energetico-section">
+                <h2>BALANÇO ENERGÉTICO (kWh)</h2>
+                <table id="energy-balance-table">
+                    <thead>
+                        <tr>
+                            <th>MÊS</th>
+                            <th>CONSUMO [kWh]</th>
+                            <th>SIMULAÇÃO 1KWP [kWh]</th>
+                            <th>GERAÇÃO PVH² [KWh/mês]</th>
+                            <th>CONSUMO REDE [kWh]</th>
+                            <th>CRÉDITO [KWh/mês]</th>
+                            <th>VALOR FATURA (SEM CRÉDITO) [R$]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Janeiro</td>
+                            <td><input type="number" class="energy-input" id="I18" value="2263" min="0" step="1" placeholder="2.263"></td>
+                            <td><input type="number" class="energy-input" id="J18" value="123" min="0" step="1" placeholder="123"></td>
+                            <td id="K18"><p id="K18">0</p></td>
+                            <td id="L18"><p id="L18">0</p></td>
+                            <td id="M18"><p id="M18">0</p></td>
+                            <td id="N18"><p id="N18">0</p></td>
+                        </tr>
+                        <tr>
+                            <td>Fevereiro</td>
+                            <td><input type="number" class="energy-input" id="I19" value="2031" min="0" step="1" placeholder="2.031"></td>
+                            <td><input type="number" class="energy-input" id="J19" value="107" min="0" step="1" placeholder="107"></td>
+                            <td id="K19"><p id="K19">0</p></td>
+                            <td id="L19"><p id="L19">0</p></td>
+                            <td id="M19"><p id="M19">0</p></td>
+                            <td id="N19"><p id="N19">0</p></td>
+                        </tr>
+                        <tr>
+                            <td>Março</td>
+                            <td><input type="number" class="energy-input" id="I20" value="852" min="0" step="1" placeholder="852"></td>
+                            <td><input type="number" class="energy-input" id="J20" value="123" min="0" step="1" placeholder="123"></td>
+                            <td id="K20"><p id="K20">0</p></td>
+                            <td id="L20"><p id="L20">0</p></td>
+                            <td id="M20"><p id="M20">0</p></td>
+                            <td id="N20"><p id="N20">0</p></td>
+                        </tr>
+                        <tr>
+                            <td>Abril</td>
+                            <td><input type="number" class="energy-input" id="I21" value="1456" min="0" step="1" placeholder="1.456"></td>
+                            <td><input type="number" class="energy-input" id="J21" value="104" min="0" step="1" placeholder="104"></td>
+                            <td id="K21"><p id="K21">0</p></td>
+                            <td id="L21"><p id="L21">0</p></td>
+                            <td id="M21"><p id="M21">0</p></td>
+                            <td id="N21"><p id="N21">0</p></td>
+                        </tr>
+                        <tr>
+                            <td>Maio</td>
+                            <td><input type="number" class="energy-input" id="I22" value="1638" min="0" step="1" placeholder="1.638"></td>
+                            <td><input type="number" class="energy-input" id="J22" value="97" min="0" step="1" placeholder="97"></td>
+                            <td id="K22"><p id="K22">0</p></td>
+                            <td id="L22"><p id="L22">0</p></td>
+                            <td id="M22"><p id="M22">0</p></td>
+                            <td id="N22"><p id="N22">0</p></td>
+                        </tr>
+                        <tr>
+                            <td>Junho</td>
+                            <td><input type="number" class="energy-input" id="I23" value="655" min="0" step="1" placeholder="655"></td>
+                            <td><input type="number" class="energy-input" id="J23" value="85" min="0" step="1" placeholder="85"></td>
+                            <td id="K23"><p id="K23">0</p></td>
+                            <td id="L23"><p id="L23">0</p></td>
+                            <td id="M23"><p id="M23">0</p></td>
+                            <td id="N23"><p id="N23">0</p></td>
+                        </tr>
+                        <tr>
+                            <td>Julho</td>
+                            <td><input type="number" class="energy-input" id="I24" value="990" min="0" step="1" placeholder="990"></td>
+                            <td><input type="number" class="energy-input" id="J24" value="82" min="0" step="1" placeholder="82"></td>
+                            <td id="K24"><p id="K24">0</p></td>
+                            <td id="L24"><p id="L24">0</p></td>
+                            <td id="M24"><p id="M24">0</p></td>
+                            <td id="N24"><p id="N24">0</p></td>
+                        </tr>
+                        <tr>
+                            <td>Agosto</td>
+                            <td><input type="number" class="energy-input" id="I25" value="946" min="0" step="1" placeholder="946"></td>
+                            <td><input type="number" class="energy-input" id="J25" value="100" min="0" step="1" placeholder="100"></td>
+                            <td id="K25"><p id="K25">0</p></td>
+                            <td id="L25"><p id="L25">0</p></td>
+                            <td id="M25"><p id="M25">0</p></td>
+                            <td id="N25"><p id="N25">0</p></td>
+                        </tr>
+                        <tr>
+                            <td>Setembro</td>
+                            <td><input type="number" class="energy-input" id="I26" value="509" min="0" step="1" placeholder="509"></td>
+                            <td><input type="number" class="energy-input" id="J26" value="98" min="0" step="1" placeholder="98"></td>
+                            <td id="K26"><p id="K26">0</p></td>
+                            <td id="L26"><p id="L26">0</p></td>
+                            <td id="M26"><p id="M26">0</p></td>
+                            <td id="N26"><p id="N26">0</p></td>
+                        </tr>
+                        <tr>
+                            <td>Outubro</td>
+                            <td><input type="number" class="energy-input" id="I27" value="873" min="0" step="1" placeholder="873"></td>
+                            <td><input type="number" class="energy-input" id="J27" value="112" min="0" step="1" placeholder="112"></td>
+                            <td id="K27"><p id="K27">0</p></td>
+                            <td id="L27"><p id="L27">0</p></td>
+                            <td id="M27"><p id="M27">0</p></td>
+                            <td id="N27"><p id="N27">0</p></td>
+                        </tr>
+                        <tr>
+                            <td>Novembro</td>
+                            <td><input type="number" class="energy-input" id="I28" value="1019" min="0" step="1" placeholder="1.019"></td>
+                            <td><input type="number" class="energy-input" id="J28" value="115" min="0" step="1" placeholder="115"></td>
+                            <td id="K28"><p id="K28">0</p></td>
+                            <td id="L28"><p id="L28">0</p></td>
+                            <td id="M28"><p id="M28">0</p></td>
+                            <td id="N28"><p id="N28">0</p></td>
+                        </tr>
+                        <tr>
+                            <td>Dezembro</td>
+                            <td><input type="number" class="energy-input" id="I29" value="619" min="0" step="1" placeholder="619"></td>
+                            <td><input type="number" class="energy-input" id="J29" value="119" min="0" step="1" placeholder="119"></td>
+                            <td id="K29"><p id="K29">0</p></td>
+                            <td id="L29"><p id="L29">0</p></td>
+                            <td id="M29"><p id="M29">0</p></td>
+                            <td id="N29"><p id="N29">0</p></td>
+                        </tr>
+                        <!-- Sessão de Valores Totais dos Dados da Tabela -->
+                        <tr>
+                            <td>Total</td>
+                            <td id="totalI-cell"><p id="totalI">0</p></td>
+                            <td id="totalJ-cell"><p id="totalJ">0</p></td>
+                            <td id="totalK-cell"><p id="totalK">0</p></td>
+                            <td id="totalL-cell"><p id="totalL">0</p></td>
+                            <td id="totalM-cell"><p id="totalM">0</p></td>
+                            <td id="totalN-cell"><p id="totalN">0</p></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <!-- Puxa o Footer pelo JavaScript -->
+        <div id="footer-container"></div>
+    </body>
+</html>
