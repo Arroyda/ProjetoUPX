@@ -1,5 +1,5 @@
 build:
-command: site
+command: dist
 commandOrigin: ui
 publish: /opt/build/repo
 publishOrigin: default
