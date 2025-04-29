@@ -1,8 +1,0 @@
-redirects:
-- from: /Project
-  status: 301
-  to: /pages
-- from: /*
-      status: 200
-      to: /index.html
-  redirectsOrigin: config
