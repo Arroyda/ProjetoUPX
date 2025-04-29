@@ -1,10 +1,13 @@
-
-[[redirects]]
-  from = "/Project"
-  to = "/pages"
-  status = 301  # redirecionamento permanente
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200  # necessário para SPAs (React, Vue, etc.)
+build:
+command: Project
+commandOrigin: ui
+publish: /opt/build/repo
+publishOrigin: default
+redirects:
+- from: /Project
+  status: 301
+  to: /pages
+- from: /*
+      status: 200
+      to: /index.html
+  redirectsOrigin: config
