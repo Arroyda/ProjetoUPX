@@ -1,0 +1,13 @@
+[build]
+  publish = "site"   # ou "site", ou o nome da pasta onde está o index.html
+
+
+[[redirects]]
+  from = "Project"
+  to = "/pages"
+  status = 301  # redirecionamento permanente
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200  # necessário para SPAs (React, Vue, etc.)
