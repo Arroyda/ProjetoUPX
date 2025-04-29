@@ -1,9 +1,6 @@
-[build]
-  publish = "site"   # ou "site", ou o nome da pasta onde está o index.html
-
 
 [[redirects]]
-  from = "Project"
+  from = "/Project"
   to = "/pages"
   status = 301  # redirecionamento permanente
 
